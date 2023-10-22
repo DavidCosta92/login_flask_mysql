@@ -1,9 +1,6 @@
 import os
-from dotenv import load_dotenv
-
 
 class Config:
-    load_dotenv()
     SECRET_KEY = 'teeest'
     MAIL_SERVER = 'smtp.gmail.com'
     MAIL_PORT = 587
@@ -11,9 +8,6 @@ class Config:
     MAIL_USE_TLS = True
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('PASSWORD_EMAIL')
-
-
-
 
 class DevelopmentConfig(Config):
     DEBUG = True

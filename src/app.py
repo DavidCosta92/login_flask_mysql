@@ -2,18 +2,22 @@ from flask import Flask , render_template , request , redirect , url_for, flash
 from flask_mysqldb import MySQL
 from flask_wtf.csrf import CSRFProtect  # para que formulario de login tenga codigo token para csrf
 from flask_login import LoginManager , login_user, logout_user, login_required
-from flask_mail import Mail , Message
-
+from flask_mail import Mail 
+from utils.EmailManager import EmailManager
 
 from config import config
 
 from models.ModelUser import ModelUser
 from models.entities.User import User
 
+from dotenv import load_dotenv
+load_dotenv()
+
 app = Flask(__name__)
 db = MySQL(app) 
 login_manager_app = LoginManager(app)
 csrf = CSRFProtect()  # para que formulario de login tenga codigo token para csrf
+
 mail = Mail()
 
 @login_manager_app.user_loader
@@ -32,15 +36,19 @@ def register():
             registerUser = ModelUser.register(db, user)
             if registerUser:                 
                 login_user(user)
-                flash("Usuario registrado y logueado")
-
-                msg = Message('Nuevo registro',
-                               sender = app.config['MAIL_USERNAME'],
-                               recipients= [user.email])
+                print("********************************* NO FUNCIONA CUANDO ME REGISTRO Y LOGUEO A LA VEZ, POR QUE??? ***************************************************")
+                print("********************************* NO FUNCIONA CUANDO ME REGISTRO Y LOGUEO A LA VEZ, POR QUE??? ***************************************************")
+                print("logued user?")
+                print(user.password)
+                print(user.email)
+                print(user.id)
+                print(user.is_active)
+                print(user.__str__)
+                print("********************************* NO FUNCIONA CUANDO ME REGISTRO Y LOGUEO A LA VEZ, POR QUE??? ***************************************************")
+                print("********************************* NO FUNCIONA CUANDO ME REGISTRO Y LOGUEO A LA VEZ, POR QUE??? ***************************************************")
+                flash("Usuario registrado")
                 
-                msg.html = render_template('email.html' , userEmail = user.email)
-
-                mail.send(msg)
+                EmailManager.sendEmail(user.email)
 
                 return redirect(url_for('home'))
             else:                
@@ -62,6 +70,18 @@ def login():
         if loguedUser != None:
             if loguedUser.password:
                 login_user(loguedUser)
+                
+                print("********************************* NO FUNCIONA CUANDO ME REGISTRO Y LOGUEO A LA VEZ, POR QUE??? ***************************************************")
+                print("********************************* NO FUNCIONA CUANDO ME REGISTRO Y LOGUEO A LA VEZ, POR QUE??? ***************************************************")
+                print("logued user?")
+                print(loguedUser.password)
+                print(loguedUser.email)
+                print(loguedUser.id)
+                print(loguedUser.is_active)
+                print(loguedUser.__str__)
+                print("********************************* NO FUNCIONA CUANDO ME REGISTRO Y LOGUEO A LA VEZ, POR QUE??? ***************************************************")
+                print("********************************* NO FUNCIONA CUANDO ME REGISTRO Y LOGUEO A LA VEZ, POR QUE??? ***************************************************")
+                flash("Usuario registrado")
                 return redirect(url_for('home'))
             else:
                 flash("Credenciales erroneas")
